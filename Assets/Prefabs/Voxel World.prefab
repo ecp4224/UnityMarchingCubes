@@ -1,0 +1,269 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1457178722651200}
+  m_IsPrefabAsset: 1
+--- !u!1 &1457178722651200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4722712586793640}
+  - component: {fileID: 33718805501808100}
+  - component: {fileID: 23619836715198514}
+  - component: {fileID: 114036874997701518}
+  - component: {fileID: 114600759267004290}
+  - component: {fileID: 114369166094323022}
+  - component: {fileID: 114551560623845126}
+  - component: {fileID: 114566943651564998}
+  - component: {fileID: 114732617337882986}
+  - component: {fileID: 114611546721968030}
+  - component: {fileID: 114492893487670184}
+  - component: {fileID: 114357012103862966}
+  m_Layer: 0
+  m_Name: Voxel World
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4722712586793640
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -151.4149, y: -70.736465, z: -95.21015}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23619836715198514
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &33718805501808100
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Mesh: {fileID: 0}
+--- !u!114 &114036874997701518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f6ac398febb46ecb0ff0c588cac8417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  world: {fileID: 0}
+  fileLoader: {fileID: 0}
+  providers: []
+--- !u!114 &114357012103862966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0042d44ddac341729ca8ac0bfb1269e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biomeType: 3
+  maxWidth: 15
+  maxHeight: 15
+  minWidth: 4
+  minHeight: 4
+  biomeMaterial: {fileID: 2100000, guid: 7f7269232defff949aeaef923f93b578, type: 2}
+--- !u!114 &114369166094323022
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5854b2b8f4c4d1cac854182ca2a5b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
+  fileLoader: {fileID: 114551560623845126}
+  monitor: {fileID: 0}
+  seed: 0
+  heightMultiplier: 8
+  resolution: 0
+--- !u!114 &114492893487670184
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08ac80421ee44e8aa545a9b1788d3942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
+  BiomeSpawnSettings:
+  - Type: 1
+    spawnRate: 0.2
+    minimumDistance: 2
+    Prefabs:
+    - {fileID: 156854, guid: 2df808d621aeb3848972070fefcbbcb9, type: 2}
+    - {fileID: 147882, guid: 0d05138e8e77a574facd6e68921f00fe, type: 2}
+    - {fileID: 107274, guid: c7c90f2fb014faa4c91a0a4cfd312e9e, type: 2}
+    - {fileID: 135824, guid: 6f6c8a31fa6b7a646ba06357948f6a48, type: 2}
+    - {fileID: 188070, guid: 9edfae1deb6e5ab4e9a67b847a9db4af, type: 2}
+    - {fileID: 186736, guid: 0ca793d82b7575e4c9fe2ec384f4e930, type: 2}
+    - {fileID: 110578, guid: 60c8cd19a9f205c49acb81330a4f3033, type: 2}
+  - Type: 2
+    spawnRate: 0.05
+    minimumDistance: 3
+    Prefabs:
+    - {fileID: 185794, guid: 0e876684362b16e4cbedb04c5270bd8b, type: 2}
+    - {fileID: 104154, guid: bdd58c631bf482b44a94306605e8a1d6, type: 2}
+    - {fileID: 161096, guid: 5f4e4fc992366fb438db68cae8dfd630, type: 2}
+    - {fileID: 153304, guid: d2951fd827b277e4c9c2fa2adc501638, type: 2}
+    - {fileID: 118932, guid: cbb9e6406cab627408d329f928b24abe, type: 2}
+    - {fileID: 105802, guid: dcbfbd98ea1f7754ca2cea05326d7d30, type: 2}
+  - Type: 3
+    spawnRate: 0.01
+    minimumDistance: 4
+    Prefabs:
+    - {fileID: 104154, guid: bdd58c631bf482b44a94306605e8a1d6, type: 2}
+    - {fileID: 161096, guid: 5f4e4fc992366fb438db68cae8dfd630, type: 2}
+    - {fileID: 147348, guid: 1f7a880296138054393ddd594689b026, type: 2}
+    - {fileID: 148496, guid: 442fa93b8855e134aabcf8d2165f5580, type: 2}
+    - {fileID: 135268, guid: 69b1a91c6b7bd754bace5a384c4479dc, type: 2}
+--- !u!114 &114551560623845126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b206b2de1b94a309cde362f77234c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 1
+  chunkDirectoryName: chunks
+  enableSaving: 0
+--- !u!114 &114566943651564998
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff573b1d9fce450b896f4463a0a759d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 1
+  randomizeRate: 0.01
+--- !u!114 &114600759267004290
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c23b7a184194991973c201bf636942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loader: {fileID: 0}
+  chunkProviderQueue: []
+  players: []
+  BiomeSettings: []
+  ChunkProcessors: []
+  viewDistance: 10
+  terrianMaterial: {fileID: 2100000, guid: 341595e250b17a943a17f80ee0e83bce, type: 2}
+  Width: 10
+  Height: 10
+  Depth: 10
+  chunkSize: 10
+  voxelSize: 1
+--- !u!114 &114611546721968030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c31e61ad8ffb473eb340f4a0077c0ab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biomeType: 2
+  maxWidth: 5
+  maxHeight: 5
+  minWidth: 4
+  minHeight: 4
+  biomeMaterial: {fileID: 2100000, guid: 2d9ef50c149f7434a8110b8551b84904, type: 2}
+--- !u!114 &114732617337882986
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457178722651200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79238e9f683f47fca25154decb668db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  biomeType: 1
+  maxWidth: 6
+  maxHeight: 6
+  minWidth: 4
+  minHeight: 4
+  biomeMaterial: {fileID: 2100000, guid: 9bb937eab8db81d479b860edbe632635, type: 2}
