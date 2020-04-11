@@ -54,11 +54,16 @@ public struct FlatChunkJob : IJob
                 for (int z = 0; z < buffer; z++)
                 {
                     int index = x * (height + 1) * buffer + y * buffer + z;
+                    //int index = x * (height + 1) * buffer + y * buffer + z;
                     //int index = x + buffer * (y + buffer * z);
                     
                     if (y < height / 2 && y > 0)
                     {
                         chunk[index] = 1;
+                    }
+                    else
+                    {
+                        chunk[index] = 0;
                     }
                 }
             }

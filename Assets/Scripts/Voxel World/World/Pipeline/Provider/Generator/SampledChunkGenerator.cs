@@ -77,7 +77,7 @@ public struct SampledChunkJob : IJob
         float height = height01 * heightMultiplier;
         float heightSample = height - position.y;
 
-        float volumetricSample = PerlinNoise.PerlinNoise3((position.x+pi)*sampleSize, (position.y+pi)*sampleSize, (position.z+pi)*sampleSize);
+        float volumetricSample = PerlinNoiseThree.PerlinNoise3((position.x+pi)*sampleSize, (position.y+pi)*sampleSize, (position.z+pi)*sampleSize);
         return Mathf.Min(heightSample, -volumetricSample) + Mathf.Clamp01(height01 - position.y + 0.5f);
     }
 
@@ -91,6 +91,8 @@ public struct SampledChunkJob : IJob
             {
                 for (int y = 0; y < height; y++)
                 {
+                    //int index = (height * z) + y + (x * height * buffer);
+                    //int index = x + buffer * (y + buffer * z);
                     int index = x * (height + 1) * buffer + y * buffer + z;
 
                     var offset = new Vector3(x * scale, y * scale, z * scale);

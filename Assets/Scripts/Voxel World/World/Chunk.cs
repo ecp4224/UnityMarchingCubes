@@ -29,7 +29,7 @@ public class Chunk
 
     public int PosToIndex(int x, int y, int z)
     {
-        
+        //var index = (ChunkHeight * z) + y + (x * ChunkSize * ChunkHeight);
         var index = x * (ChunkHeight + 1) * (ChunkSize + 1) + y * (ChunkSize + 1) + z;
         return index;
         //return x + ChunkSize * (y + ChunkSize * z);
@@ -79,7 +79,7 @@ public class Chunk
         
         for (int x = 0; x < size; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < ChunkHeight; y++)
             {
                 for (int z = 0; z < size; z++)
                 {

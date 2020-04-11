@@ -3,7 +3,7 @@
 
 using UnityEngine;
 
-public static class PerlinNoise
+public static class PerlinNoiseThree
 {
     // not same permutation table as Perlin's reference to avoid copyright issues;
     // Perlin's table can be found at http://mrl.nyu.edu/~perlin/noise/
