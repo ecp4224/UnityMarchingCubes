@@ -17,6 +17,9 @@ public class VoxelWorld : BindableMonoBehavior
     [BindComponents]
     [HideInInspector]
     public List<ChunkProvider> providers;
+
+    public int startWidth = 10;
+    public int startHeight = 10;
 	
     // Use this for initialization
     void Start ()
@@ -31,7 +34,7 @@ public class VoxelWorld : BindableMonoBehavior
 
     public void Generate()
     {
-        Generate(new Vector2(0, 0), new Vector2(world.Width, world.Depth));
+        Generate(new Vector2(0, 0), new Vector2(startWidth, startHeight));
     }
     
     public void Generate(Vector2 min, Vector2 max)

@@ -54,7 +54,7 @@ public class ChunkFileLoader : ChunkProvider
         
         var chunkPos = chunk.Position;
         
-        var worldOrigin = new Vector3(chunkPos.X * world.voxelSize * world.chunkSize, 0.0f, chunkPos.Z * world.voxelSize * world.chunkSize);
+        var worldOrigin = new Vector3(chunkPos.X * world.chunkSize, 0.0f, chunkPos.Z * world.chunkSize);
         
         var filename = worldOrigin.ToString().Md5Sum();
         

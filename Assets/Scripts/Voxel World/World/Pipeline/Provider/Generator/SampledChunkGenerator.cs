@@ -9,10 +9,10 @@ using Random = UnityEngine.Random;
 public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
 {
     public int seed;
-    public float heightMultiplier;
+    public float heightMultiplier = 4;
     public float resolution = 1f;
-    public int waterLevel;
-    public float scale;
+    public int waterLevel = 32;
+    public float noiseScale = 0.13f;
 
     protected override SampledChunkJob CreateJob(Vector3 origin)
     {
@@ -25,12 +25,12 @@ public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
         
         return new SampledChunkJob()
         {
-            chunk = new NativeArray<float>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
-            blocks = new NativeArray<int>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
-            height = world.Height,
+            chunk = new NativeArray<float>(buffer * buffer * (world.ChunkHeight + 1), Allocator.Persistent),
+            blocks = new NativeArray<int>(buffer * buffer * (world.ChunkHeight + 1), Allocator.Persistent),
+            height = world.ChunkHeight,
             heightMultiplier = heightMultiplier,
             origin = origin,
-            scale = scale,
+            scale = noiseScale,
             seed = seed,
             size = size,
             resolution = resolution,
@@ -146,9 +146,9 @@ public struct SampledChunkJob : IJob
         {
             for (int z = 0; z < buffer; z++)
             {
-                var offset = new Vector2((x * scale) + origin.x,(z * scale) + origin.z);
+                var offset = new Vector2(x + origin.x,z + origin.z);
                 
-                float height = noise.Compute(offset.x, offset.y) * (this.height - waterLevel);
+                float height = noise.Compute(offset.x * scale , offset.y * scale) * heightMultiplier;
                 
                 heightMap[buffer * x + z] = height + waterLevel;
             }
@@ -166,9 +166,9 @@ public struct SampledChunkJob : IJob
         {
             for (int z = 0; z < buffer; z++)
             {   
-                var offset = new Vector2((x * scale) + origin.x,(z * scale) + origin.z);
-                
-                var dirtThickness = noise.Compute(offset.x, offset.y);
+                //var offset = new Vector2((x * scale) + origin.x,(z * scale) + origin.z);
+
+                var dirtThickness = 1f;
                 var dirtTransition = heightMap[buffer * x + z];
                 var stoneTransition = dirtTransition + dirtThickness;
 

@@ -9,12 +9,19 @@ using Random = UnityEngine.Random;
 public class ClassicMCGenerator : ChunkGenerator<ClassicChunkJob>
 {
     public uint seed;
-    public int waterLevel;
+    public int waterLevel = 32;
+
+    public float noiseScale = 0.13f;
+
+    public float heightLowScaler = 1f / 6f;
+    public float heightHighScaler = 1f / 5f;
+
+    public float heightLow = 4;
+    public float heightHigh = 6;
     
     protected override ClassicChunkJob CreateJob(Vector3 origin)
     {
         int size = world.chunkSize;
-        float scale = world.voxelSize;
 
         int buffer = size + 1;
 
@@ -23,14 +30,18 @@ public class ClassicMCGenerator : ChunkGenerator<ClassicChunkJob>
         
         return new ClassicChunkJob()
         {
-            chunk = new NativeArray<float>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
-            blocks = new NativeArray<int>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
-            height = world.Height,
+            chunk = new NativeArray<float>(buffer * buffer * (world.ChunkHeight + 1), Allocator.Persistent),
+            blocks = new NativeArray<int>(buffer * buffer * (world.ChunkHeight + 1), Allocator.Persistent),
+            height = world.ChunkHeight,
             origin = origin,
-            scale = scale,
+            scale = noiseScale,
             size = size,
             waterLevel = waterLevel,
-            seed = seed
+            seed = seed,
+            heightLowScaler = heightLowScaler,
+            heightHighScaler = heightHighScaler,
+            heightLow = heightLow,
+            heightHigh = heightHigh,
         };
     }
 
@@ -55,11 +66,13 @@ public struct ClassicChunkJob : IJob
     [ReadOnly] public int waterLevel;
 
     [ReadOnly] public float scale;
-
-
     
     [ReadOnly] public uint seed;
     [ReadOnly] public Vector3 origin;
+    [ReadOnly] public float heightLowScaler;
+    [ReadOnly] public float heightHighScaler;
+    [ReadOnly] public float heightLow;
+    [ReadOnly] public float heightHigh;
     
     public NativeArray<float> chunk;
     public NativeArray<int> blocks;
@@ -76,7 +89,7 @@ public struct ClassicChunkJob : IJob
 
         Strate(noise1, heightMap);
 
-        CreateCaves(rand);
+        //CreateCaves(rand);
 
         
         //Do this last
@@ -85,10 +98,9 @@ public struct ClassicChunkJob : IJob
 
     private Vector2 ComputeNoisePosition(int x, int z)
     {
-        Vector2 offset = new Vector2(x * scale, z * scale);
-        Vector2 _origin = new Vector2(origin.x + offset.x, origin.z + offset.y);
+        Vector2 _origin = new Vector2(origin.x + x, origin.z + z);
 
-        return _origin;
+        return _origin * scale;
     }
 
     private NativeArray<float> HeightMap(Noise noise1, Noise noise2, Noise noise3)
@@ -104,8 +116,8 @@ public struct ClassicChunkJob : IJob
             {
                 Vector2 pos = ComputeNoisePosition(x, z);
                 
-                float heightLow = noise1.Compute(pos.x * 1.3f, pos.y * 1.3f) / 6f - 4f;
-                float heightHigh = noise2.Compute(pos.x * 1.3f, pos.y * 1.3f) / 5f + 6f;
+                float heightLow = noise1.Compute(pos.x * 1.3f, pos.y * 1.3f) * heightLowScaler - this.heightLow;
+                float heightHigh = noise2.Compute(pos.x * 1.3f, pos.y * 1.3f) * heightHighScaler + this.heightHigh;
 
                 float heightResult;
                 if (noise3.Compute(pos.x, pos.y) / 8f > 0f)
@@ -166,6 +178,18 @@ public struct ClassicChunkJob : IJob
 
                     blocks[index] = blockType;
                 }
+            }
+        }
+    }
+
+    private void Smooth(NativeArray<float> heightMap)
+    {
+        int buffer = size + 1;
+        for (int x = 0; x < buffer; x++)
+        {
+            for (int z = 0; z < buffer; z++)
+            {
+                
             }
         }
     }

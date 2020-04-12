@@ -103,14 +103,11 @@ public class World : BindableMonoBehavior
     private float maxMagnitude = 0f;
 
     public Material terrianMaterial;
-    public int Width = 10;
-    public int Height = 10;
-    public int Depth = 10;
+    public int ChunkHeight = 10;
     private const int PointExists = 1;
     private const int PointEmpty = 0;
 
     public int chunkSize = 10;
-    public float voxelSize = 1.0f;
     
     private Dictionary<ChunkPoint, Chunk> _chunks = new Dictionary<ChunkPoint, Chunk>();
     private Dictionary<ChunkPoint, GameObject> _goCache = new Dictionary<ChunkPoint, GameObject>();
@@ -188,7 +185,7 @@ public class World : BindableMonoBehavior
 
         chunk.Points[chunk.PosToIndex((int) insidePoint.x, (int) insidePoint.y, (int) insidePoint.z)] = modifier;
 
-        chunk.Recalculate(chunkSize, voxelSize, PointToOrigin(chunk.Position), true);
+        chunk.Recalculate(chunkSize, true);
 
         var go = ChunkObjectAt(chunk.Position);
         var mesh = go.GetComponent<MeshFilter>().sharedMesh;
@@ -292,7 +289,7 @@ public class World : BindableMonoBehavior
         var x = point.X;
         var z = point.Z;
             
-        var origin = new Vector3(x * voxelSize * chunkSize, 0.0f, z * voxelSize * chunkSize);
+        var origin = new Vector3(x  * chunkSize, 0.0f, z  * chunkSize);
             
         Chunk c;
         int index = 0;
@@ -339,8 +336,8 @@ public class World : BindableMonoBehavior
 
     public ChunkPoint OriginToPoint(Vector3 origin)
     {
-        int x = (int) ((origin.x / voxelSize) / chunkSize);
-        int z = (int) ((origin.z / voxelSize) / chunkSize);
+        int x = (int) (origin.x / chunkSize);
+        int z = (int) (origin.z / chunkSize);
         
         return new ChunkPoint(x, z);
     }
@@ -373,7 +370,7 @@ public class World : BindableMonoBehavior
 
     public Vector3 PointToOrigin(ChunkPoint point)
     {
-        return new Vector3(point.X * voxelSize * chunkSize, 0.0f, point.Z * voxelSize * chunkSize);
+        return new Vector3(point.X * chunkSize, 0.0f, point.Z  * chunkSize);
     }
 
     public Vector3 ChunkOrigin(Chunk c)
@@ -393,7 +390,7 @@ public class World : BindableMonoBehavior
         //Get material from biome settings
         var biomeSettings = BiomeSettingsFor(nonNullChunk.BiomeData.type);
         
-        var origin = new Vector3(nonNullChunk.Position.X * voxelSize * chunkSize, 0.0f, nonNullChunk.Position.Z * voxelSize * chunkSize);
+        var origin = new Vector3(nonNullChunk.Position.X  * chunkSize, 0.0f, nonNullChunk.Position.Z * chunkSize);
         var gameObject = nonNullChunk.GenerateObject(biomeSettings.biomeMaterial, origin);
         //gameObject.transform.SetParent(gameObject.transform);
                 

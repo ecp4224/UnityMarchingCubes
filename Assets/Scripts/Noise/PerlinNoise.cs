@@ -22,6 +22,6 @@ public struct PerlinNoise : Noise
     
     public float Compute(float x, float y)
     {
-        return Mathf.PerlinNoise(x + _xOffset, y + _yOffset);
+        return Mathf.PerlinNoise((x + _xOffset), (y + _yOffset));
     }
 }

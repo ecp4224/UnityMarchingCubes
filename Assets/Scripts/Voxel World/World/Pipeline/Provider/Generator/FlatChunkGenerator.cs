@@ -8,16 +8,14 @@ public class FlatChunkGenerator: ChunkGenerator<FlatChunkJob>
     protected override FlatChunkJob CreateJob(Vector3 origin)
     {
         int size = world.chunkSize;
-        float scale = world.voxelSize;
         
         int buffer = size + 1;
         
         return new FlatChunkJob
         {
-            chunk = new NativeArray<float>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
-            height = world.Height,
+            chunk = new NativeArray<float>(buffer * buffer * (world.ChunkHeight + 1), Allocator.Persistent),
+            height = world.ChunkHeight,
             origin = origin,
-            scale = scale,
             size = size
         };
     }
@@ -36,8 +34,6 @@ public struct FlatChunkJob : IJob
     public int size;
     [ReadOnly]
     public int height;
-    [ReadOnly]
-    public float scale;
     
     
     public Vector3 origin;

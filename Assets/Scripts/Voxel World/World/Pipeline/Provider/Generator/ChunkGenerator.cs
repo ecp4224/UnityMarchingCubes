@@ -31,10 +31,7 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
     public override Chunk LoadChunkAt(Vector3 worldOrigin)
     {
         int size = world.chunkSize;
-        float scale = world.voxelSize;
         
-        int buffer = size + 1;
-
         if (!_jobs.ContainsKey(worldOrigin))
         {
             var job = CreateJob(worldOrigin);
@@ -48,9 +45,9 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
 
                 var sample = ChunkFromJob(job);
                 
-                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.Height);
+                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight);
             
-                c.Recalculate(size, scale, worldOrigin, true);
+                c.Recalculate(size, true);
                 
                 if (fileLoader != null)
                     fileLoader.SaveChunk(c);
@@ -79,9 +76,9 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
 
                 var sample = ChunkFromJob(holder.job);
                 
-                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.Height);
+                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight);
             
-                c.Recalculate(size, scale, worldOrigin, true);
+                c.Recalculate(size, true);
                 
                 if (fileLoader != null)
                     fileLoader.SaveChunk(c);

@@ -42,9 +42,9 @@ public class Chunk
 
     public float GetSample(Vector3 position)
     {
-        var worldOrigin = new Vector3(Position.X * World.main.voxelSize * World.main.chunkSize, 
+        var worldOrigin = new Vector3(Position.X * World.main.chunkSize, 
                                         0.0f, 
-                                        Position.Z * World.main.voxelSize * World.main.chunkSize);
+                                        Position.Z * World.main.chunkSize);
 
         var truePos = (position - worldOrigin).Abs();
         
@@ -53,9 +53,9 @@ public class Chunk
 
     public Vector3 ConvertPosition(Vector3 position)
     {
-        var worldOrigin = new Vector3(Position.X * World.main.voxelSize * World.main.chunkSize, 
+        var worldOrigin = new Vector3(Position.X * World.main.chunkSize, 
             0.0f, 
-            Position.Z * World.main.voxelSize * World.main.chunkSize);
+            Position.Z * World.main.chunkSize);
 
         var truePos = (position - worldOrigin).Round();
 
@@ -67,7 +67,7 @@ public class Chunk
         return truePos;
     }
 
-    internal void Recalculate(int size, float scale, Vector3 origin, bool interpolate)
+    internal void Recalculate(int size, bool interpolate)
     {
         int flagIndex;
         int index = 0;
@@ -107,7 +107,7 @@ public class Chunk
                         continue;
                     
                     //Get the offset of this current block
-                    var offset = new Vector3(x * scale, y * scale, z * scale);
+                    var offset = new Vector3(x, y, z);
 
                     for (int triangle = 0; triangle < 5; triangle++)
                     {
@@ -123,9 +123,6 @@ public class Chunk
 
                             var edge1 = VoxelLookUp.edgeVertexOffsets[edgeIndex, 0];
                             var edge2 = VoxelLookUp.edgeVertexOffsets[edgeIndex, 1];
-
-                            edge1 *= scale;
-                            edge2 *= scale;
 
                             Vector3 middle;
                             if (interpolate)
