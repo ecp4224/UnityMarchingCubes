@@ -11,12 +11,12 @@ public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
     public int seed;
     public float heightMultiplier;
     public float resolution = 1f;
-    public int seaLevel;
+    public int waterLevel;
+    public float scale;
 
     protected override SampledChunkJob CreateJob(Vector3 origin)
     {
         int size = world.chunkSize;
-        float scale = world.voxelSize;
 
         int buffer = size + 1;
 
@@ -26,13 +26,15 @@ public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
         return new SampledChunkJob()
         {
             chunk = new NativeArray<float>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
+            blocks = new NativeArray<int>(buffer * buffer * (world.Height + 1), Allocator.Persistent),
             height = world.Height,
             heightMultiplier = heightMultiplier,
             origin = origin,
             scale = scale,
             seed = seed,
             size = size,
-            resolution = resolution
+            resolution = resolution,
+            waterLevel = waterLevel,
         };
     }
 
@@ -40,6 +42,7 @@ public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
     {
         float[] array = job.chunk.ToArray();
         job.chunk.Dispose();
+        job.blocks.Dispose();
         return array;
     }
 }
@@ -61,28 +64,35 @@ public struct SampledChunkJob : IJob
 
     [ReadOnly]
     public float resolution;
+
+    [ReadOnly]
+    public float waterLevel;
     
     
     public Vector3 origin;
     public NativeArray<float> chunk;
+    public NativeArray<int> blocks;
     public int seed;
 
     public float Sample(Vector3 position)
     {   
+        
         float pi = Mathf.PI;
         float sampleSize = 0.1f;
         
-        //float height02 = Mathf.PerlinNoise(position.x + (seed * 2), position.z + (seed * 2));
-        float height01 = Mathf.PerlinNoise(((position.x+pi)*sampleSize) + seed, ((position.z+pi)*sampleSize) + seed);
-        float height = height01 * heightMultiplier;
+        float height02 = Mathf.PerlinNoise(position.x + (seed * 2), position.z + (seed * 2));
+        //float height01 = Mathf.PerlinNoise(((position.x+pi)*sampleSize) + seed, ((position.z+pi)*sampleSize) + seed);
+        
+        float height = height02 * heightMultiplier;
         float heightSample = height - position.y;
 
         float volumetricSample = PerlinNoiseThree.PerlinNoise3((position.x+pi)*sampleSize, (position.y+pi)*sampleSize, (position.z+pi)*sampleSize);
-        return Mathf.Min(heightSample, -volumetricSample) + Mathf.Clamp01(height01 - position.y + 0.5f);
+        return Mathf.Min(heightSample, -volumetricSample) + Mathf.Clamp01(height02 - position.y + 0.5f);
     }
 
     public void Execute()
     {
+        /*
         int buffer = size + 1;
 
         for (int x = 0; x < buffer; x++)
@@ -105,6 +115,99 @@ public struct SampledChunkJob : IJob
                         val = 0f;
 
                     chunk[index] = val;
+                }
+            }
+        }
+        */
+        
+        var rand = new Unity.Mathematics.Random((uint) seed);
+        
+        Noise noise1 = new PerlinNoise(0f, 0f);
+        //Noise noise1 = new CombinedNoise(new OctaveNoise(rand, 8), new OctaveNoise(rand, 8));
+        //Noise noise2 = new CombinedNoise(new OctaveNoise(rand, 8), new OctaveNoise(rand, 8));
+        //Noise noise3 = new OctaveNoise(rand, 6);
+        
+        var heightMap = CreateHeightMap(noise1);
+
+        Strate(heightMap, noise1);
+
+        
+        //Do this last
+        FillChunkFromBlocks();
+    }
+
+    private NativeArray<float> CreateHeightMap(Noise noise)
+    {
+        int buffer = size + 1;
+        
+        var heightMap = new NativeArray<float>(buffer * buffer, Allocator.Temp);
+
+        for (int x = 0; x < buffer; x++)
+        {
+            for (int z = 0; z < buffer; z++)
+            {
+                var offset = new Vector2((x * scale) + origin.x,(z * scale) + origin.z);
+                
+                float height = noise.Compute(offset.x, offset.y) * (this.height - waterLevel);
+                
+                heightMap[buffer * x + z] = height + waterLevel;
+            }
+        }
+
+        return heightMap;
+    }
+    
+    private void Strate(NativeArray<float> heightMap, Noise noise)
+    {
+        //TODO Don't overfill chunks, when building mesh fetch vertex information from surrounding chunks
+        int buffer = size + 1;
+
+        for (int x = 0; x < buffer; x++)
+        {
+            for (int z = 0; z < buffer; z++)
+            {   
+                var offset = new Vector2((x * scale) + origin.x,(z * scale) + origin.z);
+                
+                var dirtThickness = noise.Compute(offset.x, offset.y);
+                var dirtTransition = heightMap[buffer * x + z];
+                var stoneTransition = dirtTransition + dirtThickness;
+
+                for (int y = 0; y < height; y++)
+                {
+                    var blockType = 0;
+                    if (y == 0)
+                    {
+                        blockType = (int) Block.VOID;
+                    }
+                    else if (y <= stoneTransition)
+                    {
+                        blockType = (int) Block.STONE;
+                    }
+                    else if (y <= dirtTransition)
+                    {
+                        blockType = (int) Block.DIRT;
+                    }
+
+                    int index = x * (height + 1) * buffer + y * buffer + z;
+
+                    blocks[index] = blockType;
+                }
+            }
+        }
+    }
+    
+    private void FillChunkFromBlocks()
+    {
+        int buffer = size + 1;
+        for (int x = 0; x < buffer; x++)
+        {
+            for (int z = 0; z < buffer; z++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    int index = x * (height + 1) * buffer + y * buffer + z;
+
+                    chunk[index] = blocks[index] == (int) Block.AIR || blocks[index] == (int) Block.VOID ? 0f : 1f;
                 }
             }
         }

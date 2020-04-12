@@ -76,6 +76,8 @@ public struct ClassicChunkJob : IJob
 
         Strate(noise1, heightMap);
 
+        CreateCaves(rand);
+
         
         //Do this last
         FillChunkFromBlocks();
@@ -106,13 +108,13 @@ public struct ClassicChunkJob : IJob
                 float heightHigh = noise2.Compute(pos.x * 1.3f, pos.y * 1.3f) / 5f + 6f;
 
                 float heightResult;
-                if (noise3.Compute(x, z) / 8f > 0f)
+                if (noise3.Compute(pos.x, pos.y) / 8f > 0f)
                 {
                     heightResult = heightLow;
                 }
                 else
                 {
-                    heightResult = Unity.Mathematics.math.max(heightLow, heightHigh);
+                    heightResult = Mathf.Max(heightLow, heightHigh);
                 }
 
                 heightResult /= 2f;
@@ -155,7 +157,7 @@ public struct ClassicChunkJob : IJob
                     {
                         blockType = (int) Block.STONE;
                     }
-                    else if (y <= dirtThickness)
+                    else if (y <= dirtTransition)
                     {
                         blockType = (int) Block.DIRT;
                     }
@@ -163,6 +165,68 @@ public struct ClassicChunkJob : IJob
                     int index = x * (height + 1) * buffer + y * buffer + z;
 
                     blocks[index] = blockType;
+                }
+            }
+        }
+    }
+
+    private void CreateCaves(Unity.Mathematics.Random random)
+    {
+        int buffer = size + 1;
+
+        int caveCount = (buffer * buffer * height) / 8192;
+
+        for (int i = 0; i < caveCount; i++)
+        {
+            float caveX = random.NextInt(0, buffer);
+            float caveY = random.NextInt(0, height);
+            float caveZ = random.NextInt(0, buffer);
+
+            float caveLength = random.NextFloat() * random.NextFloat() * 200f;
+
+            float theta = random.NextFloat() * Mathf.PI * 2f;
+            float deltaTheta = 0f;
+            float phi = random.NextFloat() * Mathf.PI * 2f;
+            float deltaPhi = 0f;
+
+            float caveRadius = random.NextFloat() * random.NextFloat();
+
+            for (int len = 0; len < caveLength; len++)
+            {
+                caveX += Mathf.Sin(theta) * Mathf.Cos(phi);
+                caveY += Mathf.Cos(theta) * Mathf.Sin(phi);
+                caveZ += Mathf.Sin(phi);
+
+                theta += deltaTheta * 0.2f;
+                deltaTheta = (deltaTheta * 0.9f) + random.NextFloat() - random.NextFloat();
+
+                phi = phi / 2f + deltaPhi / 4f;
+                deltaPhi = (deltaPhi * 0.75f) + random.NextFloat() - random.NextFloat();
+
+                if (random.NextFloat() >= 0.25)
+                {
+                    float centerX = caveX + (random.NextInt(0, 4) - 2) * 0.2f;
+                    float centerY = caveY + (random.NextInt(0, 4) - 2) * 0.2f;
+                    float centerZ = caveZ + (random.NextInt(0, 4) - 2) * 0.2f;
+
+                    float radius = (height - centerY) / height;
+                    radius = 1.2f + (radius * 3.5f + 1) * caveRadius;
+                    radius = radius * Mathf.Sin(len * Mathf.PI / caveLength);
+                    
+                    for(int sphereX = (int)(centerX - radius); sphereX <= (int)(centerX + radius); ++sphereX) {
+                        for(int sphereY = (int)(centerY - radius); sphereY <= (int)(centerY + radius); ++sphereY) {
+                            for(int sphereZ = (int)(centerZ - radius); sphereZ <= (int)(centerZ + radius); ++sphereZ) {
+                                float var38 = sphereX - centerX;
+                                float var39 = sphereY - centerY;
+                                float var40 = sphereZ - centerZ;
+                                
+                                if(var38 * var38 + var39 * var39 * 2.0F + var40 * var40 < radius * radius && sphereX >= 1 && sphereY >= 1 && sphereZ >= 1 && sphereX < buffer - 1 && sphereY < height - 1 && sphereZ < buffer - 1) {
+                                    int index = sphereX * (height + 1) * buffer + sphereY * buffer + sphereZ;
+                                    blocks[index] = (int) Block.AIR;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
