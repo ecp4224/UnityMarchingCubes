@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407bb76219cd08440956b7479c7939bf, type: 3}
+  m_Name: New Block Textures
+  m_EditorClassIdentifier: 
+  Textures:
+  - {fileID: 2800000, guid: 0c232af962e3ce645be1e87bf57beb60, type: 3}
+  - {fileID: 2800000, guid: 3f3ab9e718197f646aac2053317a9a7d, type: 3}
+  - {fileID: 2800000, guid: e288c49961c7f9540971425bb3445e38, type: 3}
+  - {fileID: 2800000, guid: 0c232af962e3ce645be1e87bf57beb60, type: 3}

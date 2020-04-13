@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12668152, g: 0.15706854, b: 0.20766516, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -205,9 +205,30 @@ PrefabInstance:
       propertyPath: ChunkHeight
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 114600759267004290, guid: f8353735f3c56461cb0e1555d4fe6484,
+        type: 3}
+      propertyPath: viewDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114600759267004290, guid: f8353735f3c56461cb0e1555d4fe6484,
+        type: 3}
+      propertyPath: terrianMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c87f69772456ff84293c510852199944, type: 2}
+    - target: {fileID: 114600759267004290, guid: f8353735f3c56461cb0e1555d4fe6484,
+        type: 3}
+      propertyPath: textures
+      value: 
+      objectReference: {fileID: 11400000, guid: c16b9131a87cb084eb23351e9e4a04e4,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 114551560623845126, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
     - {fileID: 114369166094323022, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
+    - {fileID: 114732617337882986, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
+    - {fileID: 114566943651564998, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
+    - {fileID: 114611546721968030, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
+    - {fileID: 114492893487670184, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
+    - {fileID: 114357012103862966, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f8353735f3c56461cb0e1555d4fe6484, type: 3}
 --- !u!1 &214006122
 GameObject:

@@ -108,6 +108,8 @@ public class World : BindableMonoBehavior
     private const int PointEmpty = 0;
 
     public int chunkSize = 10;
+
+    public BlockTextures textures;
     
     private Dictionary<ChunkPoint, Chunk> _chunks = new Dictionary<ChunkPoint, Chunk>();
     private Dictionary<ChunkPoint, GameObject> _goCache = new Dictionary<ChunkPoint, GameObject>();
@@ -389,9 +391,13 @@ public class World : BindableMonoBehavior
                 
         //Get material from biome settings
         var biomeSettings = BiomeSettingsFor(nonNullChunk.BiomeData.type);
+
+        var material = terrianMaterial;
+        if (biomeSettings != null)
+            material = biomeSettings.biomeMaterial;
         
         var origin = new Vector3(nonNullChunk.Position.X  * chunkSize, 0.0f, nonNullChunk.Position.Z * chunkSize);
-        var gameObject = nonNullChunk.GenerateObject(biomeSettings.biomeMaterial, origin);
+        var gameObject = nonNullChunk.GenerateObject(material, origin, textures);
         //gameObject.transform.SetParent(gameObject.transform);
                 
         _chunks.Add(point, nonNullChunk);
