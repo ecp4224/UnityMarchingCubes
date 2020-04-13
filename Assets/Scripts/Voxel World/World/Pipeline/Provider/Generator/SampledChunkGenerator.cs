@@ -38,11 +38,19 @@ public class SampledChunkGenerator : ChunkGenerator<SampledChunkJob>
         };
     }
 
-    protected override float[] ChunkFromJob(SampledChunkJob job)
+    protected override float[] VertexFromJob(SampledChunkJob job)
     {
         float[] array = job.chunk.ToArray();
         job.chunk.Dispose();
+        return array;
+    }
+    
+    protected override int[] BlocksFromJob(SampledChunkJob job)
+    {
+        int[] array = job.blocks.ToArray();
+
         job.blocks.Dispose();
+
         return array;
     }
 }

@@ -45,14 +45,20 @@ public class ClassicMCGenerator : ChunkGenerator<ClassicChunkJob>
         };
     }
 
-    protected override float[] ChunkFromJob(ClassicChunkJob job)
+    protected override float[] VertexFromJob(ClassicChunkJob job)
     {
         float[] array = job.chunk.ToArray();
         job.chunk.Dispose();
         
-        //TODO Store bloccks
+        return array;
+    }
+
+    protected override int[] BlocksFromJob(ClassicChunkJob job)
+    {
+        int[] array = job.blocks.ToArray();
+
         job.blocks.Dispose();
-        
+
         return array;
     }
 }
@@ -86,6 +92,8 @@ public struct ClassicChunkJob : IJob
         Noise noise3 = new OctaveNoise(rand, 6);
         
         var heightMap = HeightMap(noise1, noise2, noise3);
+
+        heightMap = Smooth(heightMap);
 
         Strate(noise1, heightMap);
 
@@ -182,16 +190,37 @@ public struct ClassicChunkJob : IJob
         }
     }
 
-    private void Smooth(NativeArray<float> heightMap)
+    private NativeArray<float> Smooth(NativeArray<float> heightMap)
     {
         int buffer = size + 1;
         for (int x = 0; x < buffer; x++)
         {
+            if (x - 1 < 0 || x + 1 >= buffer)
+                continue;
+            
             for (int z = 0; z < buffer; z++)
             {
+                if (z - 1 < 0 || z + 1 >= buffer)
+                    continue;
                 
+                float sum = heightMap[buffer * x + z];
+
+                sum += heightMap[buffer * (x + 1) + z];
+                sum += heightMap[buffer * (x - 1) + z];
+                sum += heightMap[buffer * x + (z + 1)];
+                sum += heightMap[buffer * x + (z - 1)];
+                sum += heightMap[buffer * (x + 1) + (z + 1)];
+                sum += heightMap[buffer * (x - 1) + (z - 1)];
+                sum += heightMap[buffer * (x - 1) + (z + 1)];
+                sum += heightMap[buffer * (x + 1) + (z - 1)];
+
+                float average = sum / 9f;
+
+                heightMap[buffer * x + z] = average;
             }
         }
+
+        return heightMap;
     }
 
     private void CreateCaves(Unity.Mathematics.Random random)

@@ -14,11 +14,12 @@ public class Chunk
     public int ChunkHeight;
     public float[] Points;
     public BiomeData BiomeData;
+    public int[] blockData;
 
     [NonSerialized]
     public List<GameObject> Entity;
 
-    public Chunk(World.ChunkPoint position, float[] points, int chunkSize, int chunkHeight)
+    public Chunk(World.ChunkPoint position, float[] points, int chunkSize, int chunkHeight, int[] blocks)
     {
         Position = position;
         Points = points;
@@ -67,8 +68,10 @@ public class Chunk
         return truePos;
     }
 
-    internal void Recalculate(int size, bool interpolate)
+    internal void Recalculate(bool interpolate)
     {
+        int size = ChunkSize;
+        
         int flagIndex;
         int index = 0;
         
@@ -175,6 +178,28 @@ public class Chunk
         //go.transform.Rotate(0f, 0f, -180f);
         
         return go;
+    }
+
+    public Texture2D BlocksToTexture()
+    {
+        int size = ChunkSize;
+        
+        var texture = new Texture2D(size * size, ChunkHeight, TextureFormat.ARGB32, false);
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < ChunkHeight; y++)
+            {
+                for (int z = 0; z < size; z++)
+                {
+                    int index = PosToIndex(x, y, z);
+
+                    int block = blockData[index];
+
+                    int tex_x = size * x + z;
+                    int tex_y = y;
+                }
+            }
+        }
     }
 
     public void Dispose()

@@ -43,11 +43,12 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
             {
                 handle.Complete();
 
-                var sample = ChunkFromJob(job);
+                var sample = VertexFromJob(job);
+                var blocks = BlocksFromJob(job);
                 
-                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight);
+                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight, blocks);
             
-                c.Recalculate(size, true);
+                c.Recalculate(true);
                 
                 if (fileLoader != null)
                     fileLoader.SaveChunk(c);
@@ -74,11 +75,12 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
             {
                 holder.handle.Complete();
 
-                var sample = ChunkFromJob(holder.job);
+                var sample = VertexFromJob(holder.job);
+                var blocks = BlocksFromJob(holder.job);
                 
-                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight);
+                var c = new Chunk(world.OriginToPoint(worldOrigin), sample, size, world.ChunkHeight, blocks);
             
-                c.Recalculate(size, true);
+                c.Recalculate(true);
                 
                 if (fileLoader != null)
                     fileLoader.SaveChunk(c);
@@ -102,7 +104,9 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
 
     protected abstract T CreateJob(Vector3 worldOrigin);
 
-    protected abstract float[] ChunkFromJob(T job);
+    protected abstract float[] VertexFromJob(T job);
+    
+    protected abstract int[] BlocksFromJob(T job);
 
     private void OnDestroy()
     {
@@ -112,7 +116,7 @@ public abstract class ChunkGenerator<T> : ChunkProvider where T : struct, IJob
             
             holder.handle.Complete(); //Complete the job before we die
 
-            ChunkFromJob(holder.job); //Ensure we clear the chunk data
+            VertexFromJob(holder.job); //Ensure we clear the chunk data
         }
     }
 }

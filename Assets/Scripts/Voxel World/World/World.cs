@@ -185,7 +185,7 @@ public class World : BindableMonoBehavior
 
         chunk.Points[chunk.PosToIndex((int) insidePoint.x, (int) insidePoint.y, (int) insidePoint.z)] = modifier;
 
-        chunk.Recalculate(chunkSize, true);
+        chunk.Recalculate(true);
 
         var go = ChunkObjectAt(chunk.Position);
         var mesh = go.GetComponent<MeshFilter>().sharedMesh;
