@@ -10,7 +10,7 @@ public class JobMonitor : BindableMonoBehavior
 	public Text text;
 
 	[BindComponent(fromObject = "Voxel World")]
-	private SampledChunkGenerator temp;
+	private ClassicMCGenerator temp;
 	
 	// Update is called once per frame
 	void Update ()
